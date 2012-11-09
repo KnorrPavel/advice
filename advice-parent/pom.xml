@@ -20,10 +20,11 @@
 
     <properties>
         <spring.version>3.1.1.RELEASE</spring.version>
-        <hibernate.version>4.1.4.Final</hibernate.version>
+
         <wicket.version>1.5.7</wicket.version>
         <jetty.version>6.1.26</jetty.version>
-        <spring.security.version>3.1.0.RELEASE</spring.security.version>
+        <!--<hibernate.version>4.1.7.Final</hibernate.version>-->
+        <!--<spring.security.version>3.1.0.RELEASE</spring.security.version>-->
 
         <build.filter.file>build.local.properties</build.filter.file>
     </properties>
@@ -40,8 +41,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>2.3.2</version>
                     <configuration>
-                        <source>1.6</source>
-                        <target>1.6</target>
+                        <source>1.7</source>
+                        <target>1.7</target>
                         <optimize>true</optimize>
                         <debug>true</debug>
                     </configuration>
@@ -75,40 +76,45 @@
     </reporting>
 
     <dependencyManagement>
+
         <dependencies>
-            <!--Hibernate dependencies - those are referenced-->
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-core</artifactId>
-                <version>${hibernate.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
 
-            <!--Commons-DBCP - Data Source provider -->
-            <dependency>
-                <groupId>commons-dbcp</groupId>
-                <artifactId>commons-dbcp</artifactId>
-                <version>1.4</version>
-            </dependency>
-
-            <!--Java Transaction API. We need this specific version and not the one-->
-            <!--provided with hibernate because of the lib version conflicts-->
-            <dependency>
-                <groupId>javax.transaction</groupId>
-                <artifactId>jta</artifactId>
-                <version>1.1</version>
-            </dependency>
+            <!-- DATABASE DRIVERS -->
 
             <!--PostgreSQL driver-->
             <dependency>
                 <groupId>postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>9.1-901-1.jdbc4</version>
+            </dependency>
+
+            <!--MongoDB driver-->
+            <dependency>
+                <groupId>org.mongodb</groupId>
+                <artifactId>mongo-java-driver</artifactId>
+                <version>2.9.1</version>
+            </dependency>
+
+
+            <!-- Spring data bindings-->
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-jpa</artifactId>
+                <version>1.1.2.RELEASE</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-mongodb</artifactId>
+                <version>1.0.4.RELEASE</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>persistence-api</artifactId>
+                <version>1.0.2</version>
             </dependency>
 
             <!--SPRING DEPENDENCIES-->
@@ -121,11 +127,13 @@
             </dependency>
             <!-- Expression Language (depends on spring-core) Define this if you use Spring Expression APIs
             (org.springframework.expression.*)-->
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-expression</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
+            <!--
+                        <dependency>
+                            <groupId>org.springframework</groupId>
+                            <artifactId>spring-expression</artifactId>
+                            <version>${spring.version}</version>
+                        </dependency>
+            -->
             <!-- Bean Factory and JavaBeans utilities (depends on spring-core) Define this if you use Spring Bean APIs
            (org.springframework.beans.*) -->
             <dependency>
@@ -142,33 +150,37 @@ central artifact for Spring's Dependency Injection Container and is generally al
             </dependency>
             <!--Various Application Context utilities, including EhCache, JavaMail, Quartz, and Freemarker integration
    Define this if you need any of these integrations -->
+<!--
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context-support</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+-->
             <!-- Transaction Management Abstraction (depends on spring-core, spring-beans, spring-aop, spring-context)
               Define this if you use Spring Transactions or DAO Exception Hierarchy (org.springframework.transaction.
            */org.springframework.dao.*) -->
+<!--
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-tx</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+-->
             <!--Spring web integration-->
-            <dependency>
+<!--            <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
                 <version>${spring.version}</version>
-            </dependency>
+            </dependency>-->
             <!--Spring ORM support-->
-            <dependency>
+<!--            <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-orm</artifactId>
                 <version>${spring.version}</version>
-            </dependency>
+            </dependency>-->
             <!--Spring security-->
-            <dependency>
+<!--            <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-core</artifactId>
                 <version>${spring.security.version}</version>
@@ -178,18 +190,16 @@ central artifact for Spring's Dependency Injection Container and is generally al
                 <artifactId>spring-security-config</artifactId>
                 <version>${spring.security.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-web</artifactId>
                 <version>${spring.security.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-acl</artifactId>
                 <version>${spring.security.version}</version>
-            </dependency>
+            </dependency>-->
 
             <!-- Spring AOP + AspectJ -->
             <dependency>
@@ -313,7 +323,6 @@ always defined with a 'test' scope for the integration testing framework and uni
 
     </dependencyManagement>
 
-
     <dependencies>
         <!-- LOGGING DEPENDENCIES - LOG4J -->
         <dependency>
@@ -377,7 +386,6 @@ always defined with a 'test' scope for the integration testing framework and uni
             <version>1.9.5-rc1</version>
             <scope>test</scope>
         </dependency>
-
         <!--FEST-assert for testing. -->
         <dependency>
             <groupId>org.easytesting</groupId>
